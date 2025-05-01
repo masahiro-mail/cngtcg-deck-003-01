@@ -82,10 +82,10 @@ export const getRecommendedDecks = (allCardIds: string[]) => {
       createdAt: "2024-04-30T00:00:00.000Z",
       isRecommended: true,
     },
-    // 🥈モーリーさん(202504/30)
-    btaavaeaaacaaaaaazvqaqvavaubaakaaaaaaaaaeaaaaaaaaaaaaaaaaaaaaaa: {
+    // 🥈モーリーさん(2025/04/30)🟥15 - IDを修正
+    btaavaeaaacaaaaaazvqaqvavaubaakaeaaaaaaaaaaaaaaaaaaaaaaaaaaa: {
       name: "🥈モーリーさん(2025/04/30)🟥15",
-      cards: decodeDeckId("btaavaeaaacaaaaaazvqaqvavaubaakaaaaaaaaaeaaaaaaaaaaaaaaaaaaaaaa", allCardIds),
+      cards: decodeDeckId("btaavaeaaacaaaaaazvqaqvavaubaakaeaaaaaaaaaaaaaaaaaaaaaaaaaaa", allCardIds),
       createdAt: "2024-04-30T00:00:00.000Z",
       isRecommended: true,
     },
