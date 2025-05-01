@@ -180,7 +180,7 @@ export default function CardModal({
       onClick={closeModal}
     >
       <div
-        className={`${isDark ? "bg-gray-900" : "bg-white"} border ${colors.border} rounded-lg overflow-hidden max-w-2xl w-full shadow-2xl transition-all duration-300 transform scale-100 hover:scale-[1.01]`}
+        className={`${isDark ? "bg-gray-900" : "bg-white"} border ${colors.border} rounded-lg overflow-hidden max-w-2xl w-full shadow-2xl transition-all duration-300 transform scale-100 hover:scale-[1.01] max-h-[90vh] flex flex-col`}
         style={{
           boxShadow: `0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2), 0 0 0 1px ${isDark ? "rgba(30, 41, 59, 0.7)" : "rgba(255, 255, 255, 0.1)"}`,
         }}
@@ -194,161 +194,166 @@ export default function CardModal({
           </button>
         </div>
 
-        <div className="flex">
-          {/* 左側: カード基本情報 */}
-          <div className={`w-1/4 ${colors.main} p-4 flex flex-col`}>
-            <div className={`${colors.light} p-3 rounded-lg mb-4 text-center shadow-md`}>
-              <div className="text-white font-bold text-lg drop-shadow-sm">{card.name}</div>
-            </div>
-
-            <div className={`${colors.light} p-2 rounded-lg mb-2 text-center shadow-md`}>
-              <span className="text-white font-bold drop-shadow-sm">{card.type}</span>
-            </div>
-
-            {card.rarity && (
-              <div className={`${getRarityStyles()} p-2 rounded-lg text-center text-sm mb-auto shadow-md`}>
-                {card.rarity}
+        {/* スクロール可能なコンテンツエリア */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="flex">
+            {/* 左側: カード基本情報 */}
+            <div className={`w-1/4 ${colors.main} p-4 flex flex-col`}>
+              <div className={`${colors.light} p-3 rounded-lg mb-4 text-center shadow-md`}>
+                <div className="text-white font-bold text-lg drop-shadow-sm">{card.name}</div>
               </div>
-            )}
-          </div>
 
-          {/* 右側: カード詳細情報 */}
-          <div className={`w-3/4 ${isDark ? "bg-gray-900" : "bg-gray-50"} p-4`}>
-            {/* バトル情報 */}
-            {(card.bp || card.sp) && (
+              <div className={`${colors.light} p-2 rounded-lg mb-2 text-center shadow-md`}>
+                <span className="text-white font-bold drop-shadow-sm">{card.type}</span>
+              </div>
+
+              {card.rarity && (
+                <div className={`${getRarityStyles()} p-2 rounded-lg text-center text-sm mb-auto shadow-md`}>
+                  {card.rarity}
+                </div>
+              )}
+            </div>
+
+            {/* 右側: カード詳細情報 */}
+            <div className={`w-3/4 ${isDark ? "bg-gray-900" : "bg-gray-50"} p-4`}>
+              {/* バトル情報 */}
+              {(card.bp || card.sp) && (
+                <div className="mb-4">
+                  <div className={`text-sm font-medium ${isDark ? "text-gray-400" : "text-gray-600"} mb-2`}>
+                    バトル情報
+                  </div>
+                  <div className="flex space-x-4">
+                    {card.bp && card.bp !== "0" && card.bp !== "-" && (
+                      <div className="flex items-center">
+                        <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"} mr-2`}>
+                          バトルポイント (BP):
+                        </span>
+                        <span className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-3 py-1 rounded-md font-bold shadow-md">
+                          {card.bp}
+                        </span>
+                      </div>
+                    )}
+                    {card.sp && card.sp !== "0" && card.sp !== "-" && (
+                      <div className="flex items-center">
+                        <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"} mr-2`}>
+                          助太刀ポイント (AP):
+                        </span>
+                        <span className="bg-gradient-to-r from-red-600 to-red-500 text-white px-3 py-1 rounded-md font-bold shadow-md">
+                          {card.sp}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* コスト情報 */}
               <div className="mb-4">
                 <div className={`text-sm font-medium ${isDark ? "text-gray-400" : "text-gray-600"} mb-2`}>
-                  バトル情報
+                  コスト情報
                 </div>
-                <div className="flex space-x-4">
-                  {card.bp && card.bp !== "0" && card.bp !== "-" && (
-                    <div className="flex items-center">
-                      <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"} mr-2`}>
-                        バトルポイント (BP):
-                      </span>
-                      <span className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-3 py-1 rounded-md font-bold shadow-md">
-                        {card.bp}
-                      </span>
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center">
+                    <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"} mr-2`}>総コスト:</span>
+                    <span
+                      className={`${isDark ? "bg-gradient-to-br from-gray-700 to-gray-800" : "bg-gradient-to-br from-gray-600 to-gray-700"} text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-md`}
+                    >
+                      {card.cost}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"} mr-2`}>色コスト:</span>
+                    <div
+                      className={`w-8 h-8 rounded-full ${getColorClass(card.color)} flex items-center justify-center text-white font-bold shadow-md`}
+                    >
+                      {card.colorCost || 0}
                     </div>
-                  )}
-                  {card.sp && card.sp !== "0" && card.sp !== "-" && (
-                    <div className="flex items-center">
-                      <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"} mr-2`}>
-                        助太刀ポイント (AP):
-                      </span>
-                      <span className="bg-gradient-to-r from-red-600 to-red-500 text-white px-3 py-1 rounded-md font-bold shadow-md">
-                        {card.sp}
-                      </span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"} mr-2`}>無色コスト:</span>
+                    <div
+                      className={`${isDark ? "bg-gradient-to-br from-gray-600 to-gray-700" : "bg-gradient-to-br from-gray-500 to-gray-600"} text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-md`}
+                    >
+                      {card.colorlessCost || 0}
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
-            )}
 
-            {/* コスト情報 */}
-            <div className="mb-4">
-              <div className={`text-sm font-medium ${isDark ? "text-gray-400" : "text-gray-600"} mb-2`}>コスト情報</div>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center">
-                  <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"} mr-2`}>総コスト:</span>
-                  <span
-                    className={`${isDark ? "bg-gradient-to-br from-gray-700 to-gray-800" : "bg-gradient-to-br from-gray-600 to-gray-700"} text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-md`}
+              {/* 収録パック */}
+              {card.pack && (
+                <div className={`${colors.lighter} border ${colors.border} rounded-lg p-2 mb-4 shadow-md`}>
+                  <div className={`text-sm ${colors.text} mb-1 font-semibold`}>収録パック</div>
+                  <div className={`text-sm ${colors.textLight}`}>{card.pack}</div>
+                </div>
+              )}
+
+              {/* 能力 */}
+              {card.ability && (
+                <div className={`${colors.lighter} border ${colors.border} rounded-lg p-3 mb-4 shadow-md`}>
+                  <div className={`text-sm ${colors.text} mb-1 font-semibold`}>能力</div>
+                  {formatEffectType()}
+                  <div className={`${isDark ? "text-gray-200" : "text-gray-800"}`}>{card.ability}</div>
+                </div>
+              )}
+
+              {/* フレイバーテキスト */}
+              {card.description && (
+                <div
+                  className={`${isDark ? "bg-gray-800/70" : "bg-gray-100"} border ${isDark ? "border-gray-700" : "border-gray-300"} rounded-lg p-3 mb-4 shadow-md`}
+                >
+                  <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"} mb-1 font-semibold`}>
+                    フレイバーテキスト
+                  </div>
+                  <div className={`${isDark ? "text-gray-300" : "text-gray-700"} italic`}>{card.description}</div>
+                </div>
+              )}
+
+              {/* カード枚数と増減ボタン */}
+              <div className="mt-4 flex justify-center items-center">
+                <div
+                  className={`flex items-center space-x-4 ${isDark ? "bg-gray-800/80" : "bg-gray-200/80"} px-6 py-3 rounded-lg shadow-md`}
+                >
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      onDecrement && onDecrement()
+                    }}
+                    disabled={!onDecrement || deckCount === 0}
+                    className={`p-1 rounded-full ${
+                      !onDecrement || deckCount === 0
+                        ? isDark
+                          ? "bg-gray-700 text-gray-500"
+                          : "bg-gray-300 text-gray-400"
+                        : isDark
+                          ? "bg-gradient-to-br from-red-900 to-red-800 text-red-300 hover:from-red-800 hover:to-red-700"
+                          : "bg-gradient-to-br from-red-200 to-red-300 text-red-600 hover:from-red-300 hover:to-red-400"
+                    } cursor-${!onDecrement || deckCount === 0 ? "not-allowed" : "pointer"} shadow-md transition-all duration-200`}
                   >
-                    {card.cost}
+                    <Minus size={20} />
+                  </button>
+                  <span className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"} w-6 text-center`}>
+                    {deckCount}
                   </span>
-                </div>
-                <div className="flex items-center">
-                  <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"} mr-2`}>色コスト:</span>
-                  <div
-                    className={`w-8 h-8 rounded-full ${getColorClass(card.color)} flex items-center justify-center text-white font-bold shadow-md`}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      onIncrement && onIncrement()
+                    }}
+                    disabled={!onIncrement || deckCount >= 4}
+                    className={`p-1 rounded-full ${
+                      !onIncrement || deckCount >= 4
+                        ? isDark
+                          ? "bg-gray-700 text-gray-500"
+                          : "bg-gray-300 text-gray-400"
+                        : isDark
+                          ? "bg-gradient-to-br from-green-900 to-green-800 text-green-300 hover:from-green-800 hover:to-green-700"
+                          : "bg-gradient-to-br from-green-200 to-green-300 text-green-600 hover:from-green-300 hover:to-green-400"
+                    } cursor-${!onIncrement || deckCount >= 4 ? "not-allowed" : "pointer"} shadow-md transition-all duration-200`}
                   >
-                    {card.colorCost || 0}
-                  </div>
+                    <Plus size={20} />
+                  </button>
                 </div>
-                <div className="flex items-center">
-                  <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"} mr-2`}>無色コスト:</span>
-                  <div
-                    className={`${isDark ? "bg-gradient-to-br from-gray-600 to-gray-700" : "bg-gradient-to-br from-gray-500 to-gray-600"} text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-md`}
-                  >
-                    {card.colorlessCost || 0}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 収録パック */}
-            {card.pack && (
-              <div className={`${colors.lighter} border ${colors.border} rounded-lg p-2 mb-4 shadow-md`}>
-                <div className={`text-sm ${colors.text} mb-1 font-semibold`}>収録パック</div>
-                <div className={`text-sm ${colors.textLight}`}>{card.pack}</div>
-              </div>
-            )}
-
-            {/* 能力 */}
-            {card.ability && (
-              <div className={`${colors.lighter} border ${colors.border} rounded-lg p-3 mb-4 shadow-md`}>
-                <div className={`text-sm ${colors.text} mb-1 font-semibold`}>能力</div>
-                {formatEffectType()}
-                <div className={`${isDark ? "text-gray-200" : "text-gray-800"}`}>{card.ability}</div>
-              </div>
-            )}
-
-            {/* フレイバーテキスト */}
-            {card.description && (
-              <div
-                className={`${isDark ? "bg-gray-800/70" : "bg-gray-100"} border ${isDark ? "border-gray-700" : "border-gray-300"} rounded-lg p-3 mb-4 shadow-md`}
-              >
-                <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"} mb-1 font-semibold`}>
-                  フレイバーテキスト
-                </div>
-                <div className={`${isDark ? "text-gray-300" : "text-gray-700"} italic`}>{card.description}</div>
-              </div>
-            )}
-
-            {/* カード枚数と増減ボタン */}
-            <div className="mt-4 flex justify-center items-center">
-              <div
-                className={`flex items-center space-x-4 ${isDark ? "bg-gray-800/80" : "bg-gray-200/80"} px-6 py-3 rounded-lg shadow-md`}
-              >
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    onDecrement && onDecrement()
-                  }}
-                  disabled={!onDecrement || deckCount === 0}
-                  className={`p-1 rounded-full ${
-                    !onDecrement || deckCount === 0
-                      ? isDark
-                        ? "bg-gray-700 text-gray-500"
-                        : "bg-gray-300 text-gray-400"
-                      : isDark
-                        ? "bg-gradient-to-br from-red-900 to-red-800 text-red-300 hover:from-red-800 hover:to-red-700"
-                        : "bg-gradient-to-br from-red-200 to-red-300 text-red-600 hover:from-red-300 hover:to-red-400"
-                  } cursor-${!onDecrement || deckCount === 0 ? "not-allowed" : "pointer"} shadow-md transition-all duration-200`}
-                >
-                  <Minus size={20} />
-                </button>
-                <span className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-800"} w-6 text-center`}>
-                  {deckCount}
-                </span>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    onIncrement && onIncrement()
-                  }}
-                  disabled={!onIncrement || deckCount >= 4}
-                  className={`p-1 rounded-full ${
-                    !onIncrement || deckCount >= 4
-                      ? isDark
-                        ? "bg-gray-700 text-gray-500"
-                        : "bg-gray-300 text-gray-400"
-                      : isDark
-                        ? "bg-gradient-to-br from-green-900 to-green-800 text-green-300 hover:from-green-800 hover:to-green-700"
-                        : "bg-gradient-to-br from-green-200 to-green-300 text-green-600 hover:from-green-300 hover:to-green-400"
-                  } cursor-${!onIncrement || deckCount >= 4 ? "not-allowed" : "pointer"} shadow-md transition-all duration-200`}
-                >
-                  <Plus size={20} />
-                </button>
               </div>
             </div>
           </div>

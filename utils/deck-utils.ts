@@ -72,13 +72,27 @@ export const loadDecksFromStorage = (): Record<string, { name: string; cards: st
   return JSON.parse(localStorage.getItem("cnpDecks") || "{}")
 }
 
-// getRecommendedDecks 関数を更新して、新しいデッキを追加します
+// getRecommendedDecks 関数を更新して、デッキIDを変更し、新しいデッキを追加します
 export const getRecommendedDecks = (allCardIds: string[]) => {
   return {
-    // 🥇TiAさん(2025/04/19) 🟥15
-    btaaaaeaakcaaaaaazvqaqvavaubaaakaaaaaaaapaaaaaaaaaaaaaaaaaaa: {
+    // 🥇REYさん(2025/04/30) 🟥5🟦10
+    btaevkeaaxacavdavaaaadvakazaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: {
+      name: "🥇REYさん(2025/04/30) 🟥5🟦10",
+      cards: decodeDeckId("btaevkeaaxacavdavaaaadvakazaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", allCardIds),
+      createdAt: "2024-04-30T00:00:00.000Z",
+      isRecommended: true,
+    },
+    // 🥈モーリーさん(202504/30)
+    btaavaeaaacaaaaaazvqaqvavaubaakaaaaaaaaaeaaaaaaaaaaaaaaaaaaaaaa: {
+      name: "🥈モーリーさん(2025/04/30)🟥15",
+      cards: decodeDeckId("btaavaeaaacaaaaaazvqaqvavaubaakaaaaaaaaaeaaaaaaaaaaaaaaaaaaaaaa", allCardIds),
+      createdAt: "2024-04-30T00:00:00.000Z",
+      isRecommended: true,
+    },
+    // 🥇TiAさん(2025/04/19) 🟥15 - IDを変更
+    btaaaaeaavcaaaaaazvqaqvavaubaaakaaaaaaaavaaaaaaaaaaaaaaaaaaaaa: {
       name: "🥇TiAさん(2025/04/19) 🟥15",
-      cards: decodeDeckId("btaaaaeaakcaaaaaazvqaqvavaubaaakaaaaaaaapaaaaaaaaaaaaaaaaaaa", allCardIds),
+      cards: decodeDeckId("btaaaaeaavcaaaaaazvqaqvavaubaaakaaaaaaaavaaaaaaaaaaaaaaaaaaaaa", allCardIds),
       createdAt: "2024-04-19T00:00:00.000Z",
       isRecommended: true,
     },

@@ -900,7 +900,7 @@ export default function DeckBuilderPage() {
                         {availableCards.map((card) => (
                           <tr
                             key={card.id}
-                            className="border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
+                            className="hover:bg-gray-100 dark:hover:bg-gray-700 py-2 cursor-pointer"
                             onClick={() => handleCardClick(card)}
                           >
                             <td className="p-2 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
@@ -930,10 +930,10 @@ export default function DeckBuilderPage() {
                                 </button>
                               </div>
                             </td>
-                            <td className="p-2 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
+                            <td className="px-4 py-3 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
                               {card.name}
                             </td>
-                            <td className="p-2 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
+                            <td className="px-4 py-3 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
                               <div
                                 className={`w-6 h-6 rounded-full ${
                                   card.color === "blue"
@@ -948,34 +948,34 @@ export default function DeckBuilderPage() {
                                 }`}
                               ></div>
                             </td>
-                            <td className="p-2 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
+                            <td className="px-4 py-3 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
                               {card.cost}
                             </td>
-                            <td className="p-2 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
+                            <td className="px-4 py-3 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
                               {card.colorCost || 0}
                             </td>
-                            <td className="p-2 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
+                            <td className="px-4 py-3 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
                               {card.colorlessCost || 0}
                             </td>
-                            <td className="p-2 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
+                            <td className="px-4 py-3 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
                               {card.type}
                             </td>
-                            <td className="p-2 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
+                            <td className="px-4 py-3 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
                               {card.bp || "-"}
                             </td>
-                            <td className="p-2 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
+                            <td className="px-4 py-3 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
                               {card.sp || card.ap || "-"}
                             </td>
-                            <td className="p-2 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
+                            <td className="px-4 py-3 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
                               {card.effectType ? card.effectType.join(", ") : "-"}
                             </td>
-                            <td className="p-2 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 max-w-[300px] truncate">
+                            <td className="px-4 py-3 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 max-w-[300px] truncate">
                               {card.ability || "-"}
                             </td>
-                            <td className="p-2 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
+                            <td className="px-4 py-3 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
                               {card.rarity || "-"}
                             </td>
-                            <td className="p-2 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
+                            <td className="px-4 py-3 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 whitespace-nowrap">
                               {card.pack || "-"}
                             </td>
                           </tr>
@@ -985,7 +985,7 @@ export default function DeckBuilderPage() {
                   </div>
                 </div>
               ) : (
-                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                <div className="grid gap-2 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                   {availableCards.map((card) => (
                     <SwipeableCard
                       key={card.id}

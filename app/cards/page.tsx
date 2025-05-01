@@ -370,7 +370,7 @@ export default function CardsPage() {
             </TabsList>
 
             <TabsContent value="grid" className="w-full">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 justify-items-center">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 justify-items-center">
                 {filteredCards.map((card) => (
                   <div key={card.id} onClick={() => handleCardClick(card)} className="cursor-pointer card-hover-effect">
                     <CardComponent card={card} isFaceUp={true} />
