@@ -49,6 +49,13 @@ export const analyzeDeck = (deck: Card[]): string => {
     サポーター: deck.filter((card) => card.type === "サポーター").length,
   }
 
+  // SP値の分布を計算
+  const spDistribution = {
+    sp2000: deck.filter((card) => card.sp === "2000").length,
+    sp1000: deck.filter((card) => card.sp === "1000").length,
+    spNone: deck.filter((card) => card.sp === "-").length,
+  }
+
   // コスト分布を計算
   const lowCost = deck.filter((card) => card.cost <= 3).length
   const midCost = deck.filter((card) => card.cost > 3 && card.cost <= 6).length
@@ -60,7 +67,7 @@ export const analyzeDeck = (deck: Card[]): string => {
   // 分析結果を返す
   return (
     `主に${mainColor}属性のデッキ（${mainColorCount}枚）\n` +
-    `ユニット: ${typeCount.ユニット}枚, イベント: ${typeCount.イベント}枚, サポーター: ${typeCount.サポーター}枚\n` +
+    `ユニット: ${typeCount.ユニット}枚（SP2000 ${spDistribution.sp2000}/SP1000 ${spDistribution.sp1000}/SPなし ${spDistribution.spNone}）, イベント: ${typeCount.イベント}枚, サポーター: ${typeCount.サポーター}枚\n` +
     `低コスト(1-3): ${lowCost}枚, 中コスト(4-6): ${midCost}枚, 高コスト(7+): ${highCost}枚\n` +
     `平均コスト: ${avgCost}`
   )
@@ -75,6 +82,20 @@ export const loadDecksFromStorage = (): Record<string, { name: string; cards: st
 // getRecommendedDecks 関数を更新して、デッキIDを変更し、新しいデッキを追加します
 export const getRecommendedDecks = (allCardIds: string[]) => {
   return {
+    // ゆーきまるさん(2025/05/10)🟥15
+    btaaaaeaavaaaaaaazvqaxvavauaaaakaaaaaaaavaaaaaaaaaaaaaaaaaaa: {
+      name: "ゆーきまるさん(2025/05/10)🟥15",
+      cards: decodeDeckId("btaaaaeaavaaaaaaazvqaxvavauaaaakaaaaaaaavaaaaaaaaaaaaaaaaaaa", allCardIds),
+      createdAt: "2024-05-10T00:00:00.000Z",
+      isRecommended: true,
+    },
+    // ゆーきまるさん(2025/05/10)🟦15
+    btaezaeadvvsddcanaaaaaqaaaaaaaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaa: {
+      name: "ゆーきまるさん(2025/05/10)🟦15",
+      cards: decodeDeckId("btaezaeadvvsddcanaaaaaqaaaaaaaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaa", allCardIds),
+      createdAt: "2024-05-10T00:00:00.000Z",
+      isRecommended: true,
+    },
     // 🥇REYさん(2025/04/30) 🟥5🟦10
     btaevkeaaxacavdavaaaadvakazaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: {
       name: "🥇REYさん(2025/04/30) 🟥5🟦10",

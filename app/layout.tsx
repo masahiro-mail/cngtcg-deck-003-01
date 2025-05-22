@@ -1,43 +1,44 @@
 import type React from "react"
-import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import "./globals.css"
 import Link from "next/link"
-import { ThemeProvider } from "@/components/theme-provider"
 import { ModeToggle } from "@/components/mode-toggle"
+import { ThemeProvider } from "@/components/theme-provider"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "CNP Trading Card Game",
-  description: "CNP Trading Card Gameのデッキビルダー",
-  generator: "v0.dev",
+  description: "CNP Trading Card Game",
+    generator: 'v0.dev'
 }
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode
-}) {
+}>) {
   return (
     <html lang="ja" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <nav className="bg-black dark:bg-black text-white p-4 border-b-2 border-yellow-400">
-            <div className="container mx-auto flex justify-between items-center">
-              <div className="text-xl font-bold flex items-center">
-                <span className="bg-yellow-400 text-black px-2 py-1 mr-2 transform -skew-x-12">CNP</span>
-                <span className="text-blue-400">Trading Card Game</span>
-              </div>
-              <div className="flex items-center space-x-4">
-                <Link href="/deck-builder" className="hover:text-yellow-400 transition-colors">
-                  デッキビルダー
-                </Link>
-                <ModeToggle />
-              </div>
+      <body className={`${inter.className} min-h-screen bg-gray-50 dark:bg-gray-950`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <header className="bg-black dark:bg-black text-white p-4 flex justify-between items-center">
+            <div className="flex items-center space-x-2">
+              <div className="bg-yellow-500 text-black font-bold px-2 py-1 rounded">CNP</div>
+              <h1 className="text-xl font-bold">Trading Card Game</h1>
             </div>
-          </nav>
-          {children}
+            <div className="flex items-center space-x-4">
+              <Link href="/deck-builder" className="hover:text-yellow-400">
+                デッキビルダー
+              </Link>
+              <Link href="/quiz" className="hover:text-yellow-400">
+                CNPトレカクイズ
+              </Link>
+              <ModeToggle />
+            </div>
+          </header>
+          <main>{children}</main>
         </ThemeProvider>
       </body>
     </html>

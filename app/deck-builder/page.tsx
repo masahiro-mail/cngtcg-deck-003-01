@@ -24,6 +24,8 @@ import {
   List,
   Minus,
   Plus,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
@@ -83,7 +85,9 @@ export default function DeckBuilderPage() {
   const [deckId, setDeckId] = useState<string>("")
   const [customDeckId, setCustomDeckId] = useState<string>("")
   const [deckName, setDeckName] = useState<string>("")
-  const [savedDecks, setSavedDecks] = useState<Record<string, { name: string; cards: string[]; createdAt: string }>>({})
+  const [savedDecks, setSavedDecks] = useState<
+    Record<string, { name: string; cards: string[]; createdAt: string; isRecommended?: boolean }>
+  >({})
   const [importDeckId, setImportDeckId] = useState<string>("")
   const [cardCounts, setCardCounts] = useState<Record<string, number>>({})
   const [sortBy, setSortBy] = useState<string>("name")
@@ -94,6 +98,9 @@ export default function DeckBuilderPage() {
   const [idError, setIdError] = useState<string>("")
   const [showFilters, setShowFilters] = useState(false)
   const [viewMode, setViewMode] = useState<"grid" | "cards">("cards")
+  const [deckFilter, setDeckFilter] = useState<string>("all")
+  const [deckSearchTerm, setDeckSearchTerm] = useState("")
+  const [showSavedDecks, setShowSavedDecks] = useState(true)
 
   // 効果分類、収録パック、レアリティの一覧
   const effectTypes = useMemo(() => getEffectTypes(), [])
@@ -552,6 +559,68 @@ export default function DeckBuilderPage() {
     return Object.values(counts).sort((a, b) => a.card.name.localeCompare(b.card.name))
   }
 
+  // デッキをフィルタリングする関数
+  const filterDecks = (
+    decks: Record<string, { name: string; cards: string[]; createdAt: string; isRecommended?: boolean }>,
+  ) => {
+    let filtered = { ...decks }
+
+    // フィルタータイプでフィルタリング
+    if (deckFilter !== "all") {
+      filtered = Object.entries(filtered).reduce(
+        (acc, [id, deck]) => {
+          // 推奨デッキのフィルタリング
+          if (deckFilter === "recommended" && deck.isRecommended) {
+            acc[id] = deck
+          }
+          // 自分のデッキのフィルタリング（推奨デッキでないもの）
+          else if (deckFilter === "my" && !deck.isRecommended) {
+            acc[id] = deck
+          }
+          // 青属性のデッキのフィルタリング
+          else if (deckFilter === "blue" && deck.name.includes("🟦")) {
+            acc[id] = deck
+          }
+          // 赤属性のデッキのフィルタリング
+          else if (deckFilter === "red" && deck.name.includes("🟥")) {
+            acc[id] = deck
+          }
+          // 黄属性のデッキのフィルタリング
+          else if (deckFilter === "yellow" && deck.name.includes("🟨")) {
+            acc[id] = deck
+          }
+          // 緑属性のデッキのフィルタリング
+          else if (deckFilter === "green" && deck.name.includes("🟩")) {
+            acc[id] = deck
+          }
+          return acc
+        },
+        {} as Record<string, { name: string; cards: string[]; createdAt: string; isRecommended?: boolean }>,
+      )
+    }
+
+    // 検索語でフィルタリング
+    if (deckSearchTerm) {
+      const term = deckSearchTerm.toLowerCase()
+      filtered = Object.entries(filtered).reduce(
+        (acc, [id, deck]) => {
+          if (deck.name.toLowerCase().includes(term) || id.toLowerCase().includes(term)) {
+            acc[id] = deck
+          }
+          return acc
+        },
+        {} as Record<string, { name: string; cards: string[]; createdAt: string; isRecommended?: boolean }>,
+      )
+    }
+
+    return filtered
+  }
+
+  // フィルタリングされたデッキを取得
+  const filteredDecks = useMemo(() => {
+    return filterDecks(savedDecks)
+  }, [savedDecks, deckFilter, deckSearchTerm])
+
   return (
     <div className="min-h-screen tech-pattern p-4 dark:bg-gray-900 bg-gray-100">
       <div className="max-w-7xl mx-auto">
@@ -628,27 +697,81 @@ export default function DeckBuilderPage() {
 
             {/* 保存済みデッキ */}
             <div className="mt-6 pt-4 border-t border-gray-200 dark:border-blue-800">
-              <h3 className="text-sm font-semibold text-gray-700 dark:text-blue-300 mb-2 flex items-center">
-                <Save className="h-4 w-4 mr-1 text-yellow-600 dark:text-yellow-400" />
-                保存デッキ
-              </h3>
-              {Object.keys(savedDecks).length === 0 ? (
-                <p className="text-gray-500 dark:text-blue-300">保存されたデッキはありません</p>
-              ) : (
-                <ul className="space-y-2">
-                  {Object.entries(savedDecks)
-                    .sort(([, a], [, b]) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-                    .map(([id, data]) => (
-                      <SavedDeckItem
-                        key={id}
-                        id={id}
-                        data={data}
-                        isActive={id === deckId}
-                        onLoadDeck={loadSavedDeck}
-                        onDeleteDeck={deleteSavedDeck}
-                      />
-                    ))}
-                </ul>
+              <div className="flex justify-between items-center mb-2">
+                <h3
+                  className="text-sm font-semibold text-gray-700 dark:text-blue-300 flex items-center cursor-pointer"
+                  onClick={() => setShowSavedDecks(!showSavedDecks)}
+                >
+                  <Save className="h-4 w-4 mr-1 text-yellow-600 dark:text-yellow-400" />
+                  保存デッキ
+                  {showSavedDecks ? (
+                    <ChevronUp className="h-4 w-4 ml-1 text-gray-500 dark:text-gray-400" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4 ml-1 text-gray-500 dark:text-gray-400" />
+                  )}
+                </h3>
+              </div>
+
+              {showSavedDecks && (
+                <div className="space-y-3">
+                  {/* デッキ検索 */}
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                      type="text"
+                      placeholder="デッキを検索..."
+                      className="pl-9 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-sm h-8"
+                      value={deckSearchTerm}
+                      onChange={(e) => setDeckSearchTerm(e.target.value)}
+                    />
+                  </div>
+
+                  {/* デッキタイプフィルター */}
+                  <div>
+                    <Label
+                      htmlFor="deckType"
+                      className="block text-xs font-medium text-gray-700 dark:text-blue-300 mb-1"
+                    >
+                      タイプ
+                    </Label>
+                    <Select value={deckFilter} onValueChange={setDeckFilter}>
+                      <SelectTrigger className="w-full bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 h-8 text-sm">
+                        <SelectValue placeholder="すべてのタイプ" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+                        <SelectItem value="all">すべてのタイプ</SelectItem>
+                        <SelectItem value="recommended">推奨デッキ</SelectItem>
+                        <SelectItem value="my">自分のデッキ</SelectItem>
+                        <SelectItem value="blue">青属性デッキ</SelectItem>
+                        <SelectItem value="red">赤属性デッキ</SelectItem>
+                        <SelectItem value="yellow">黄属性デッキ</SelectItem>
+                        <SelectItem value="green">緑属性デッキ</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* デッキリスト */}
+                  {Object.keys(filteredDecks).length === 0 ? (
+                    <p className="text-gray-500 dark:text-blue-300 text-sm py-2">保存されたデッキはありません</p>
+                  ) : (
+                    <div className="max-h-[300px] overflow-y-auto pr-1">
+                      <ul className="space-y-2">
+                        {Object.entries(filteredDecks)
+                          .sort(([, a], [, b]) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                          .map(([id, data]) => (
+                            <SavedDeckItem
+                              key={id}
+                              id={id}
+                              data={data}
+                              isActive={id === deckId}
+                              onLoadDeck={loadSavedDeck}
+                              onDeleteDeck={deleteSavedDeck}
+                            />
+                          ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
           </div>
