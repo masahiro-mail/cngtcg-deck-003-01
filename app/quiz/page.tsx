@@ -41,6 +41,8 @@ export default function QuizPage() {
       generateCardRarityQuestion,
       generateCardNameQuestion,
       generateFlavorTextQuestion,
+      generateCharacterNameQuestion,
+      generateRuleQuestion,
     ]
 
     // シャッフルして10問選ぶ
@@ -101,8 +103,8 @@ export default function QuizPage() {
     const randomCard = getRandomCard()
     if (!randomCard) return null
 
-    const correctAnswer = randomCard.color || "なし"
-    const colors = ["赤", "青", "緑", "黄", "紫", "無色", "なし"]
+    const correctAnswer = randomCard.color || "purple"
+    const colors = ["red", "blue", "green", "yellow", "purple"]
     const options = generateUniqueOptions(correctAnswer, () => colors[Math.floor(Math.random() * colors.length)], 4)
 
     return {
@@ -273,6 +275,220 @@ export default function QuizPage() {
       correctAnswer,
       explanation: `「${randomCard.name}」のフレイバーテキストは「${correctAnswer}」です。`,
     }
+  }
+
+  const generateCharacterNameQuestion = (): QuizQuestion | null => {
+    const characterQuestions = [
+      {
+        question: "メテオラスにいるエルフの長老の名前は何ですか？",
+        options: ["ズモギン", "ズギモン", "いずもん", "ズモリン"],
+        correctAnswer: "ズモギン",
+        explanation: "エルフの長老の名前は「ズモギン」です。",
+      },
+      {
+        question: "アクアペンギンの族長の名前は何ですか？",
+        options: ["ニヴェルト", "ニベルト", "ニヴァルト", "ニベルド"],
+        correctAnswer: "ニヴェルト",
+        explanation: "アクアペンギンの族長の名前は「ニヴェルト」です。",
+      },
+      {
+        question: "海賊の頭領の名前は何ですか？",
+        options: ["スイゲツ", "スイガツ", "スイケツ", "スイセツ"],
+        correctAnswer: "スイゲツ",
+        explanation: "海賊の頭領の名前は「スイゲツ」です。",
+      },
+      {
+        question: "セイドウの幹部で次元を超越する能力を持つのは誰ですか？",
+        options: ["テンシュ", "テンシン", "テンショウ", "テンシ"],
+        correctAnswer: "テンシュ",
+        explanation: "セイドウの幹部で次元を超越する能力を持つのは「テンシュ」です。",
+      },
+      {
+        question: "竜人のリーダーの名前は何ですか？",
+        options: ["ミバツ", "ミハツ", "ミバス", "ミハス"],
+        correctAnswer: "ミバツ",
+        explanation: "竜人のリーダーの名前は「ミバツ」です。",
+      },
+      {
+        question: "オーガ族の王の名前は何ですか？",
+        options: ["オウドン", "オウトン", "オウロン", "オウソン"],
+        correctAnswer: "オウドン",
+        explanation: "オーガ族の王の名前は「オウドン」です。",
+      },
+      {
+        question: "フェアリーの協力者の名前は何ですか？",
+        options: ["クルミ", "クリミ", "クルモ", "クリモ"],
+        correctAnswer: "クルミ",
+        explanation: "フェアリーの協力者の名前は「クルミ」です。",
+      },
+      {
+        question: "ハイメタモルの協力者の名前は何ですか？",
+        options: ["ミナモ", "ミナミ", "ミナト", "ミナコ"],
+        correctAnswer: "ミナモ",
+        explanation: "ハイメタモルの協力者の名前は「ミナモ」です。",
+      },
+    ]
+
+    const randomQuestion = characterQuestions[Math.floor(Math.random() * characterQuestions.length)]
+    return randomQuestion
+  }
+
+  const generateRuleQuestion = (): QuizQuestion | null => {
+    const ruleQuestions = [
+      {
+        question: "CNPトレカで勝利するには？",
+        options: [
+          "相手のゲージをゼロにする",
+          "相手のデッキをゼロにする",
+          "相手のレイキをゼロにする",
+          "3つの拠点のうち、2つを制圧する",
+        ],
+        correctAnswer: "3つの拠点のうち、2つを制圧する",
+        explanation: "CNPトレカでは3つの拠点のうち、2つを制圧することで勝利となります。",
+      },
+      {
+        question: "CNPトレカのメインデッキは何枚？",
+        options: ["15枚", "30枚", "50枚", "60枚"],
+        correctAnswer: "50枚",
+        explanation: "CNPトレカのメインデッキは50枚で構成されます。",
+      },
+      {
+        question: "同じカードはメインデッキに何枚まで？",
+        options: ["2枚", "3枚", "4枚", "5枚"],
+        correctAnswer: "4枚",
+        explanation: "同じカードはメインデッキに最大4枚まで入れることができます。",
+      },
+      {
+        question: "メインデッキ以外にある山札は？",
+        options: ["捨て札デッキ", "トラッシュデッキ", "サイドデッキ", "レイキデッキ"],
+        correctAnswer: "レイキデッキ",
+        explanation: "メインデッキ以外にレイキデッキがあります。",
+      },
+      {
+        question: "レイキデッキは何枚？",
+        options: ["10枚", "15枚", "20枚", "50枚"],
+        correctAnswer: "15枚",
+        explanation: "レイキデッキは15枚で構成されます。",
+      },
+      {
+        question: "レイキカードはどう供給される？",
+        options: [
+          "手札から使う",
+          "自分のターン開始時に引く",
+          "専用の山札の上から1枚追加される",
+          "イベントで手札に加える",
+        ],
+        correctAnswer: "専用の山札の上から1枚追加される",
+        explanation: "レイキカードは専用の山札（レイキデッキ）の上から1枚追加されます。",
+      },
+      {
+        question: "相手の攻撃を受けると何が減る？",
+        options: ["手札", "レイキ", "デッキの枚数", "ゲージ"],
+        correctAnswer: "ゲージ",
+        explanation: "相手の攻撃を受けるとゲージが減ります。",
+      },
+      {
+        question: "相手のゲージがゼロになると？",
+        options: ["相手の手札が増える", "相手はレイキを失う", "相手は拠点を失う", "相手のデッキが破棄される"],
+        correctAnswer: "相手は拠点を失う",
+        explanation: "相手のゲージがゼロになると、相手は拠点を失います。",
+      },
+      {
+        question: "拠点を制圧するために必要なこと？",
+        options: [
+          "相手ユニットを全て退場させる",
+          "相手レイキを全てレストにする",
+          "相手のゲージをゼロにする",
+          "相手デッキから特定のカードを抜く",
+        ],
+        correctAnswer: "相手のゲージをゼロにする",
+        explanation: "拠点を制圧するためには相手のゲージをゼロにする必要があります。",
+      },
+      {
+        question: "赤デッキの主な戦術は？",
+        options: ["大型ユニットを展開する", "相手ユニットを退場させる", "速攻で仕掛ける", "イベントで妨害する"],
+        correctAnswer: "速攻で仕掛ける",
+        explanation: "赤デッキの主な戦術は速攻で仕掛けることです。",
+      },
+      {
+        question: "青デッキの主な特徴は？",
+        options: ["レイキを加速させる", "相手のユニットを退場させる", "ゲージバーンを持つ", "手札を破棄させる"],
+        correctAnswer: "相手のユニットを退場させる",
+        explanation: "青デッキの主な特徴は相手のユニットを退場させることです。",
+      },
+      {
+        question: "レイキを増やせる緑の代表的なカードは？",
+        options: ["ナルカミ", "ブレイズ", "プランニング", "リュウグウノツカイ"],
+        correctAnswer: "プランニング",
+        explanation: "レイキを増やせる緑の代表的なカードは「プランニング」です。",
+      },
+      {
+        question: "黄色デッキでよく使うカードの種類は？",
+        options: ["ユニットカード", "サポーターカード", "イベントカード", "レイキカード"],
+        correctAnswer: "イベントカード",
+        explanation: "黄色デッキではイベントカードがよく使われます。",
+      },
+      {
+        question: "「奪取」能力を持つユニットは、いつ相手ゲージを削れる？",
+        options: [
+          "アタックエリアに進軍し、次のターン生き残る",
+          "自分のターン終了時に制圧している",
+          "相手のユニットに勝つ",
+          "イベントカードの効果で指定される",
+        ],
+        correctAnswer: "相手のユニットに勝つ",
+        explanation: "「奪取」能力を持つユニットは相手のユニットに勝った時に相手ゲージを削れます。",
+      },
+      {
+        question: "青デッキは手札が増えやすいが、難しい点は？",
+        options: [
+          "レイキ事故のリスクが増える",
+          "どのカードを使うかの判断",
+          "相手ユニットを退場させにくい",
+          "自分のユニットを強化しにくい",
+        ],
+        correctAnswer: "どのカードを使うかの判断",
+        explanation: "青デッキは手札が増えやすい分、どのカードを使うかの判断が難しくなります。",
+      },
+      {
+        question: "混色デッキのリスクとして高いのは？",
+        options: ["デッキ切れを起こしやすい", "大型ユニットを展開しにくい", "レイキ事故", "手札が枯渇しやすい"],
+        correctAnswer: "レイキ事故",
+        explanation: "混色デッキではレイキ事故のリスクが高くなります。",
+      },
+      {
+        question: "赤単などの速攻デッキに有効な序盤を耐えるカードは？",
+        options: ["プランニング", "ナルカミ", "マカミ", "リュウグウノツカイ"],
+        correctAnswer: "リュウグウノツカイ",
+        explanation: "赤単などの速攻デッキに対しては「リュウグウノツカイ」が序盤を耐えるのに有効です。",
+      },
+      {
+        question: "バトルフェイズでよく使われる言葉は？",
+        options: [
+          "ドロー、ディスカード、レスト、アクティブ",
+          "アタック、コンバット、バトル、助太刀",
+          "プレイ、セット、召喚、効果",
+          "メインフェイズ、ドローフェイズ、エンドフェイズ、スタンバイフェイズ",
+        ],
+        correctAnswer: "アタック、コンバット、バトル、助太刀",
+        explanation: "バトルフェイズでは「アタック、コンバット、バトル、助太刀」などの言葉がよく使われます。",
+      },
+      {
+        question: "黄色のユニットが持つ、ゲージを減らしても相手に手札を与えない能力は？",
+        options: ["奪取", "助太刀", "ゲージバーン", "レイキ回復"],
+        correctAnswer: "ゲージバーン",
+        explanation: "「ゲージバーン」は相手のゲージを減らしても相手に手札を与えない能力です。",
+      },
+      {
+        question: "コントロールデッキで手札の質を上げられると評価されているカードは？",
+        options: ["ナルカミ", "ブレイズ", "プランニング", "キングオーガ オウドン"],
+        correctAnswer: "キングオーガ オウドン",
+        explanation: "「キングオーガ オウドン」はコントロールデッキで手札の質を上げられると評価されています。",
+      },
+    ]
+
+    const randomQuestion = ruleQuestions[Math.floor(Math.random() * ruleQuestions.length)]
+    return randomQuestion
   }
 
   const getRandomCard = (): Card | null => {
