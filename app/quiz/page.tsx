@@ -69,9 +69,25 @@ export default function QuizPage() {
   }
 
   const generateCostQuestion = (): QuizQuestion | null => {
-    const randomCard = getRandomCard()
-    if (!randomCard) return null
+    // 同じ名前のユニットが複数あるカードを除外
+    const excludedNames = ["オロチ", "セツナ", "トワ", "ナルカミ", "マカミ", "ヤーマ", "リーリー", "ルナ"]
+    // プレースホルダー的なカード名を除外
+    const excludedPatterns = [
+      /^カード\d+$/, // カード1, カード2, カード3 など
+      /^Card\d+$/, // Card1, Card2, Card3 など
+      /^テスト/, // テストで始まる名前
+      /^test/i, // testで始まる名前（大文字小文字問わず）
+    ]
 
+    const availableCards = cards.filter(
+      (card) =>
+        !excludedNames.some((excludedName) => card.name.includes(excludedName)) &&
+        !excludedPatterns.some((pattern) => pattern.test(card.name)),
+    )
+
+    if (availableCards.length === 0) return null
+
+    const randomCard = availableCards[Math.floor(Math.random() * availableCards.length)]
     const correctAnswer = randomCard.cost.toString()
     const options = generateUniqueOptions(correctAnswer, () => Math.floor(Math.random() * 10).toString(), 4)
 
@@ -84,7 +100,14 @@ export default function QuizPage() {
   }
 
   const generateColorCostQuestion = (): QuizQuestion | null => {
-    const cardsWithColorCost = cards.filter((card) => card.colorCost && card.colorCost > 0)
+    // 同じ名前のユニットが複数あるカードを除外
+    const excludedNames = ["オロチ", "セツナ", "トワ", "ナルカミ", "マカミ", "ヤーマ", "リーリー", "ルナ"]
+
+    const cardsWithColorCost = cards.filter(
+      (card) =>
+        card.colorCost && card.colorCost > 0 && !excludedNames.some((excludedName) => card.name.includes(excludedName)),
+    )
+
     if (cardsWithColorCost.length === 0) return generateCardColorQuestion()
 
     const randomCard = cardsWithColorCost[Math.floor(Math.random() * cardsWithColorCost.length)]
@@ -116,7 +139,16 @@ export default function QuizPage() {
   }
 
   const generateBPQuestion = (): QuizQuestion | null => {
-    const cardsWithBP = cards.filter((card) => card.bp !== undefined && card.bp !== null)
+    // 同じ名前のユニットが複数あるカードを除外
+    const excludedNames = ["オロチ", "セツナ", "トワ", "ナルカミ", "マカミ", "ヤーマ", "リーリー", "ルナ"]
+
+    const cardsWithBP = cards.filter(
+      (card) =>
+        card.bp !== undefined &&
+        card.bp !== null &&
+        !excludedNames.some((excludedName) => card.name.includes(excludedName)),
+    )
+
     if (cardsWithBP.length === 0) return generateSPQuestion()
 
     const randomCard = cardsWithBP[Math.floor(Math.random() * cardsWithBP.length)]
@@ -132,7 +164,16 @@ export default function QuizPage() {
   }
 
   const generateSPQuestion = (): QuizQuestion | null => {
-    const cardsWithSP = cards.filter((card) => card.sp !== undefined && card.sp !== null)
+    // 同じ名前のユニットが複数あるカードを除外
+    const excludedNames = ["オロチ", "セツナ", "トワ", "ナルカミ", "マカミ", "ヤーマ", "リーリー", "ルナ"]
+
+    const cardsWithSP = cards.filter(
+      (card) =>
+        card.sp !== undefined &&
+        card.sp !== null &&
+        !excludedNames.some((excludedName) => card.name.includes(excludedName)),
+    )
+
     if (cardsWithSP.length === 0) return generateAbilityQuestion()
 
     const randomCard = cardsWithSP[Math.floor(Math.random() * cardsWithSP.length)]
@@ -209,7 +250,7 @@ export default function QuizPage() {
 
     const randomCard = cardsWithRarity[Math.floor(Math.random() * cardsWithRarity.length)]
     const correctAnswer = randomCard.rarity || "なし"
-    const rarities = ["コモン", "アンコモン", "レア", "スーパーレア", "レジェンド", "なし"]
+    const rarities = ["C", "R", "RR", "RRR"]
     const options = generateUniqueOptions(correctAnswer, () => rarities[Math.floor(Math.random() * rarities.length)], 4)
 
     return {
@@ -221,12 +262,23 @@ export default function QuizPage() {
   }
 
   const generateCardNameQuestion = (): QuizQuestion | null => {
-    const randomCard = getRandomCard()
-    if (!randomCard) return null
+    // プレースホルダー的なカード名を除外
+    const excludedPatterns = [
+      /^カード\d+$/, // カード1, カード2, カード3 など
+      /^Card\d+$/, // Card1, Card2, Card3 など
+      /^テスト/, // テストで始まる名前
+      /^test/i, // testで始まる名前（大文字小文字問わず）
+    ]
 
-    // 説明文からカード名を当てる
+    const validCards = cards.filter((card) => {
+      return !excludedPatterns.some((pattern) => pattern.test(card.name))
+    })
+
+    if (validCards.length === 0) return null
+
+    const randomCard = validCards[Math.floor(Math.random() * validCards.length)]
     const correctAnswer = randomCard.name
-    const otherCards = cards.filter((card) => card.id !== randomCard.id)
+    const otherCards = validCards.filter((card) => card.id !== randomCard.id)
     const options = [correctAnswer]
 
     while (options.length < 4 && otherCards.length > 0) {
@@ -247,7 +299,20 @@ export default function QuizPage() {
   }
 
   const generateFlavorTextQuestion = (): QuizQuestion | null => {
-    const cardsWithEffect = cards.filter((card) => card.description && card.description.length > 0)
+    // プレースホルダー的なカード名を除外
+    const excludedPatterns = [
+      /^カード\d+$/, // カード1, カード2, カード3 など
+      /^Card\d+$/, // Card1, Card2, Card3 など
+      /^テスト/, // テストで始まる名前
+      /^test/i, // testで始まる名前（大文字小文字問わず）
+    ]
+
+    const cardsWithEffect = cards.filter((card) => {
+      return (
+        card.description && card.description.length > 0 && !excludedPatterns.some((pattern) => pattern.test(card.name))
+      )
+    })
+
     if (cardsWithEffect.length === 0) return generateCardNameQuestion()
 
     const randomCard = cardsWithEffect[Math.floor(Math.random() * cardsWithEffect.length)]
@@ -492,8 +557,20 @@ export default function QuizPage() {
   }
 
   const getRandomCard = (): Card | null => {
-    if (cards.length === 0) return null
-    return cards[Math.floor(Math.random() * cards.length)]
+    // プレースホルダー的なカード名を除外
+    const excludedPatterns = [
+      /^カード\d+$/, // カード1, カード2, カード3 など
+      /^Card\d+$/, // Card1, Card2, Card3 など
+      /^テスト/, // テストで始まる名前
+      /^test/i, // testで始まる名前（大文字小文字問わず）
+    ]
+
+    const validCards = cards.filter((card) => {
+      return !excludedPatterns.some((pattern) => pattern.test(card.name))
+    })
+
+    if (validCards.length === 0) return null
+    return validCards[Math.floor(Math.random() * validCards.length)]
   }
 
   const generateUniqueOptions = (correctAnswer: string, generateOption: () => string, count: number): string[] => {
